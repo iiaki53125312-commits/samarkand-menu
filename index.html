@@ -1,0 +1,1012 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Samarkand Carta</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Samarkand · Comida típica uzbeka · Barcelona">
+<meta name="theme-color" content="#FAF8F5">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=Golos+Text:wght@400;500;600;700&family=Great+Vibes&display=swap">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+  if (window.tailwind) tailwind.config = {
+    corePlugins: { preflight: false },
+    theme: { extend: { colors: { cream: '#FAF8F5', ruby: '#8B1E1E', pahta: '#1C3B6F' } } }
+  };
+</script>
+<style>
+  /* Layout: single column of photo cards on phones, two columns from 640px; sticky language bar + section chips on top, floating order bar at the bottom.
+     Single deliberate light look (cream paper + ruby + pahta cobalt), like the printed carta. */
+  :root {
+    --cream: #FAF8F5;
+    --paper: #FFFFFF;
+    --ink: #2A2320;
+    --muted: #6E625B;
+    --line: #E9E1D6;
+    --ruby: #8B1E1E;
+    --ruby-soft: #F5E6E3;
+    --pahta: #1C3B6F;
+    --pahta-soft: #E6EBF3;
+    --gold: #B88A3B;
+    --font-brand: "Great Vibes", "Snell Roundhand", cursive;
+    --font-display: "Forum", "Cormorant Garamond", Georgia, serif;
+    --font-body: "Golos Text", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-padding-top: 128px; }
+  body {
+    background: var(--cream); color: var(--ink);
+    font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-bottom: 110px;
+  }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--cream); }
+  button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+  button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible { outline: 2px solid var(--pahta); outline-offset: 2px; }
+  img { max-width: 100%; display: block; }
+  .wrap { max-width: 980px; margin: 0 auto; }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+    background: color-mix(in srgb, var(--cream) 94%, transparent);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))) 0 calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    border-bottom: 1px solid var(--line);
+  }
+  .langs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; padding-block: 10px 8px; max-width: 980px; margin: 0 auto; }
+  .lang {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+    min-height: 50px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--paper);
+    font-weight: 600; font-size: 13px; letter-spacing: .06em; transition: background .15s, border-color .15s, color .15s;
+  }
+  .lang .flag { font-size: 20px; line-height: 1; }
+  .lang[aria-pressed="true"] { background: var(--pahta); border-color: var(--pahta); color: #fff; }
+  .chips { display: flex; gap: 8px; overflow-x: auto; padding-block: 2px 10px; scrollbar-width: none; max-width: 980px; margin: 0 auto; }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: none; padding: 7px 14px; border-radius: 999px; background: var(--paper); border: 1px solid var(--line);
+    font-size: 13.5px; font-weight: 500; white-space: nowrap; color: var(--ink); text-decoration: none;
+  }
+  .chip.active { background: var(--ruby); border-color: var(--ruby); color: #fff; }
+
+  /* ---------- masthead ---------- */
+  .mast { text-align: center; padding-block: 26px 8px; }
+  .brand { font-family: var(--font-brand); color: var(--ruby); font-size: clamp(54px, 15vw, 84px); line-height: 1; margin: 0; font-weight: 400; }
+  .tagline { font-family: var(--font-display); color: var(--gold); font-size: 21px; margin: 4px 0 0; letter-spacing: .02em; }
+  .city { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+  .ornament { display: flex; align-items: center; justify-content: center; gap: 12px; color: var(--ruby); margin: 14px auto 0; max-width: 300px; }
+  .ornament::before, .ornament::after { content: ""; flex: 1; height: 1px; background: currentColor; opacity: .45; }
+
+  /* ---------- set menu ---------- */
+  .setmenu {
+    margin-top: 22px; border-radius: 20px; background: var(--pahta); color: #fff; position: relative; overflow: hidden;
+    padding: 22px 20px 20px; display: grid; gap: 14px;
+  }
+  .setmenu::after {
+    content: ""; position: absolute; right: -50px; top: -50px; width: 170px; height: 170px; opacity: .08; pointer-events: none;
+    background: radial-gradient(circle at center, #fff 0 9px, transparent 10px) 0 0 / 36px 36px;
+    border-radius: 50%;
+  }
+  
+  .setmenu h2, .setmenu .incl { min-width: 0; overflow-wrap: anywhere; }
+  .setmenu h2 { font-family: var(--font-display); font-weight: 400; font-size: 30px; margin: 0; line-height: 1.1; }
+  .setmenu .price { font-family: var(--font-display); font-size: 40px; line-height: 1; color: #F3D9A4; }
+  .setmenu .incl { font-size: 14.5px; opacity: .92; }
+  .setmenu .row { display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; }
+  .setmenu .small { font-size: 12.5px; opacity: .78; }
+  .btn-primary {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 20px;
+    border-radius: 14px; background: var(--ruby); color: #fff; font-weight: 600; font-size: 15px;
+  }
+  .setmenu .btn-primary { background: #fff; color: var(--pahta); }
+  .btn-ghost { min-height: 44px; padding: 0 14px; border-radius: 12px; border: 1.5px solid var(--line); font-weight: 500; background: var(--paper); }
+
+  /* ---------- sections ---------- */
+  section.cat { padding-top: 30px; }
+  .cat-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .cat-head h2 { font-family: var(--font-display); font-weight: 400; font-size: 30px; margin: 0; color: var(--ruby); line-height: 1.1; text-wrap: balance; }
+  .cat-head .rule { flex: 1; height: 1px; background: var(--line); }
+  .star { width: 18px; height: 18px; flex: none; color: var(--gold); }
+
+  .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @media (min-width: 640px) { .grid { grid-template-columns: 1fr 1fr; } }
+
+  .card {
+    background: var(--paper); border-radius: 18px; overflow: hidden; border: 1px solid var(--line);
+    display: flex; flex-direction: column; text-align: left; width: 100%; padding: 0;
+    box-shadow: 0 1px 2px rgba(42,35,32,.04), 0 6px 18px -10px rgba(42,35,32,.18);
+  }
+  .card .ph { position: relative; aspect-ratio: 4 / 3; max-width: 100%; background: var(--pahta-soft); overflow: hidden; }
+  .card .ph img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+  .card:hover .ph img { transform: scale(1.03); }
+  .card .body { padding: 14px 16px 16px; display: grid; gap: 8px; }
+  .card .top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .card h3 { font-family: var(--font-display); font-weight: 400; font-size: 23px; margin: 0; line-height: 1.15; min-width: 0; }
+  .price-tag { font-weight: 700; color: var(--ruby); font-size: 17px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .price-tag small { font-weight: 500; color: var(--muted); font-size: 12.5px; }
+  .card p { margin: 0; color: var(--muted); font-size: 14px; }
+  .card .foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 2px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 5px; min-width: 0; }
+  .badge { font-size: 11.5px; font-weight: 600; padding: 3px 8px; border-radius: 999px; background: var(--ruby-soft); color: var(--ruby); letter-spacing: .01em; }
+  .tag-menu { position: absolute; left: 10px; top: 10px; background: rgba(28,59,111,.92); color: #fff; font-size: 11.5px; font-weight: 600; padding: 4px 9px; border-radius: 999px; }
+
+  .placeholder {
+    width: 100%; height: 100%; display: grid; place-items: center; color: var(--pahta);
+    background:
+      radial-gradient(circle at 50% 50%, rgba(28,59,111,.10) 0 18%, transparent 19%) 0 0 / 46px 46px,
+      linear-gradient(135deg, #EEF1F7, #E3E9F2);
+  }
+  .placeholder span { font-family: var(--font-display); font-size: 16px; background: rgba(255,255,255,.85); padding: 6px 14px; border-radius: 999px; }
+
+  /* qty control */
+  .add {
+    width: 44px; height: 44px; border-radius: 50%; background: var(--ruby); color: #fff; display: grid; place-items: center; flex: none;
+    font-size: 24px; line-height: 1; font-weight: 500;
+  }
+  .stepper { display: inline-flex; align-items: center; gap: 2px; background: var(--ruby-soft); border-radius: 999px; padding: 3px; flex: none; }
+  .stepper button { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-size: 22px; color: var(--ruby); background: var(--paper); }
+  .stepper b { min-width: 26px; text-align: center; font-variant-numeric: tabular-nums; color: var(--ruby); }
+
+  /* drinks */
+  .dgroup { background: var(--paper); border: 1px solid var(--line); border-radius: 18px; padding: 6px 14px; }
+  .dgroup h3 { font-family: var(--font-display); font-weight: 400; font-size: 21px; color: var(--pahta); margin: 10px 0 2px; }
+  .drink { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+  .dgroup h3 + .drink { border-top: 0; }
+  .drink .thumb { width: 64px; height: 64px; border-radius: 12px; overflow: hidden; flex: none; background: var(--pahta-soft); display: grid; place-items: center; color: var(--pahta); }
+  .drink .thumb img { width: 100%; height: 100%; object-fit: cover; background: #fff; }
+  .drink .thumb svg { width: 24px; height: 24px; }
+  .drink .info { flex: 1; min-width: 0; text-align: left; padding: 0; }
+  .drink .info b { display: block; font-weight: 600; font-size: 15px; }
+  .drink .info span { display: block; font-size: 12.5px; color: var(--muted); }
+  .drink .info .nomenu { color: var(--ruby); }
+  .drink .price-tag { font-size: 15px; }
+  .dgrid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+  @media (min-width: 760px) { .dgrid { grid-template-columns: 1fr 1fr; align-items: start; } }
+
+  .allergy-note { margin-top: 26px; padding: 14px 16px; border-radius: 14px; background: var(--paper); border: 1px dashed var(--gold); font-size: 13.5px; color: var(--muted); display: grid; gap: 8px; }
+  .allergy-note strong { color: var(--ink); }
+  footer.info { text-align: center; color: var(--muted); font-size: 12.5px; padding-top: 22px; }
+
+  /* ---------- order bar ---------- */
+  .orderbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 25;
+    padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    background: linear-gradient(to top, var(--cream) 70%, transparent);
+    transform: translateY(0); transition: transform .25s ease;
+  }
+  .orderbar.hide { transform: translateY(120%); }
+  .orderbar button {
+    width: 100%; max-width: 640px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    min-height: 58px; padding: 0 18px; border-radius: 16px; background: var(--ruby); color: #fff; font-weight: 600;
+    box-shadow: 0 10px 28px -12px rgba(139,30,30,.6);
+  }
+  .orderbar .count { background: #fff; color: var(--ruby); border-radius: 999px; min-width: 28px; height: 28px; display: inline-grid; place-items: center; font-size: 14px; padding: 0 8px; }
+  .orderbar .sum { font-variant-numeric: tabular-nums; font-size: 17px; }
+
+  /* ---------- sheet ---------- */
+  .backdrop { position: fixed; inset: 0; background: rgba(20,16,14,.48); z-index: 40; opacity: 0; transition: opacity .2s; }
+  .backdrop.open { opacity: 1; }
+  .sheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 41; max-height: 92%; overflow-y: auto; overscroll-behavior: contain;
+    background: var(--cream); border-radius: 22px 22px 0 0; transform: translateY(100%); transition: transform .28s cubic-bezier(.2,.8,.2,1);
+    padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    max-width: 680px; margin: 0 auto;
+  }
+  .sheet.open { transform: translateY(0); }
+  .sheet .grab { width: 44px; height: 5px; border-radius: 3px; background: #D8CDBF; margin: 10px auto 0; }
+  .sheet .inner { padding: 12px max(18px, env(safe-area-inset-right, 0px)) 0 max(18px, env(safe-area-inset-left, 0px)); display: grid; gap: 14px; }
+  .sheet .close { position: absolute; right: max(12px, env(safe-area-inset-right, 0px)); top: 12px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.92); display: grid; place-items: center; font-size: 22px; z-index: 2; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+  .sheet .hero { margin: 10px max(12px, env(safe-area-inset-right, 0px)) 0; border-radius: 16px; overflow: hidden; aspect-ratio: 1 / 1; max-width: 100%; max-height: 52vh; background: var(--pahta-soft); }
+  .sheet .hero img { width: 100%; height: 100%; object-fit: cover; }
+  .sheet h2 { font-family: var(--font-display); font-weight: 400; font-size: 30px; margin: 0; line-height: 1.1; padding-right: 44px; }
+  .sheet .desc { color: var(--ink); font-size: 15.5px; margin: 0; }
+  .sheet .label { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .sheet .actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 4px; }
+  .sheet .actions .btn-primary { flex: 1; }
+
+  .opt-group { display: grid; gap: 8px; }
+  .opt { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 14px; background: var(--paper); border: 1.5px solid var(--line); text-align: left; width: 100%; }
+  .opt img, .opt .ico { width: 46px; height: 46px; border-radius: 10px; object-fit: cover; flex: none; background: var(--pahta-soft); display: grid; place-items: center; color: var(--pahta); }
+  .opt .ico svg { width: 22px; height: 22px; }
+  .opt span { flex: 1; min-width: 0; font-weight: 500; }
+  .opt small { color: var(--muted); font-weight: 500; }
+  .opt[aria-checked="true"] { border-color: var(--pahta); background: var(--pahta-soft); }
+  .opt .tick { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); flex: none; }
+  .opt[aria-checked="true"] .tick { border-color: var(--pahta); background: radial-gradient(circle, var(--pahta) 0 5px, transparent 6px); }
+  .step-title { font-family: var(--font-display); font-size: 22px; color: var(--pahta); margin: 6px 0 0; font-weight: 400; }
+
+  .line { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .line .nm { flex: 1; min-width: 0; }
+  .line .nm b { display: block; font-weight: 600; }
+  .line .nm span { display: block; font-size: 12.5px; color: var(--muted); }
+  .line .lp { font-variant-numeric: tabular-nums; font-weight: 600; min-width: 64px; text-align: right; }
+  .field { display: grid; gap: 6px; }
+  .field input, .field textarea { width: 100%; border: 1.5px solid var(--line); border-radius: 12px; padding: 12px; font: inherit; background: var(--paper); color: var(--ink); }
+  .field textarea { min-height: 64px; resize: vertical; }
+  .total-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 18px; font-weight: 700; padding-top: 4px; }
+  .total-row .v { font-size: 24px; color: var(--ruby); font-variant-numeric: tabular-nums; }
+  .hint { font-size: 13px; color: var(--muted); margin: 0; }
+  .empty { text-align: center; color: var(--muted); padding: 24px 8px; }
+
+  /* ---------- waiter view ---------- */
+  .waiter { position: fixed; inset: 0; z-index: 60; background: #fff; color: #111; overflow-y: auto; padding: calc(18px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); }
+  .waiter .w-in { max-width: 640px; margin: 0 auto; display: grid; gap: 14px; }
+  .waiter .w-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; border-bottom: 3px solid #111; padding-bottom: 10px; }
+  .waiter .w-mesa { font-size: 34px; font-weight: 700; line-height: 1; }
+  .waiter .w-brand { font-family: var(--font-brand); color: var(--ruby); font-size: 34px; }
+  .waiter .w-line { display: flex; gap: 12px; font-size: 20px; padding: 8px 0; border-bottom: 1px solid #ddd; }
+  .waiter .w-q { font-weight: 700; min-width: 42px; }
+  .waiter .w-n { flex: 1; min-width: 0; }
+  .waiter .w-n small { display: block; font-size: 15px; color: #555; }
+  .waiter .w-p { font-variant-numeric: tabular-nums; }
+  .waiter .w-total { display: flex; justify-content: space-between; font-size: 26px; font-weight: 700; padding-top: 6px; }
+  .waiter .w-note { background: #FFF6D6; border-radius: 10px; padding: 12px; font-size: 17px; }
+  .waiter .w-meta { font-size: 13px; color: #666; }
+
+  .toast { position: fixed; left: 50%; bottom: calc(92px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px); background: var(--ink); color: #fff; padding: 10px 16px; border-radius: 999px; font-size: 14px; opacity: 0; transition: .2s; z-index: 50; pointer-events: none; white-space: nowrap; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+</style>
+
+</head>
+<body>
+<div class="topbar">
+  <div class="langs" id="langs" role="group" aria-label="Idioma / Language"></div>
+  <nav class="chips" id="chips"></nav>
+</div>
+
+<main class="wrap">
+  <header class="mast">
+    <h1 class="brand">Samarkand</h1>
+    <p class="tagline" id="tagline"></p>
+    <div class="city" id="city"></div>
+    <div class="ornament" aria-hidden="true">
+      <svg class="star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.5l2.6 4.2 4.8-1.2-1.2 4.8L22.5 12l-4.3 2.7 1.2 4.8-4.8-1.2L12 22.5l-2.6-4.2-4.8 1.2 1.2-4.8L1.5 12l4.3-2.7-1.2-4.8 4.8 1.2z"/></svg>
+    </div>
+  </header>
+  <div id="content"></div>
+  <div class="allergy-note" id="allergyNote"></div>
+  <footer class="info">Samarkand · Comida típica uzbeka · Barcelona<br><span id="pricesNote"></span></footer>
+</main>
+
+<div class="orderbar hide" id="orderbar"><button id="openCart" type="button"></button></div>
+<div class="backdrop" id="backdrop" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" hidden></div>
+<div class="waiter" id="waiter" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   DATA — prices from the printed carta
+   ============================================================ */
+const LANGS = [
+  { code: 'es', flag: '🇪🇸', label: 'ES', name: 'Español',   locale: 'es-ES' },
+  { code: 'en', flag: '🇬🇧', label: 'EN', name: 'English',   locale: 'en-GB' },
+  { code: 'ru', flag: '🇷🇺', label: 'RU', name: 'Русский',   locale: 'ru-RU' },
+  { code: 'uz', flag: '🇺🇿', label: 'UZ', name: 'Oʻzbekcha', locale: 'es-ES' },
+  { code: 'fr', flag: '🇫🇷', label: 'FR', name: 'Français',  locale: 'fr-FR' }
+];
+
+const MENU_PRICE = 19.95;
+
+// alg: gluten, egg, milk, fish, mustard, soy, sesame  — as marked on the printed carta
+const DISHES = [
+  { id: 'vinegret',  cat: 'salads',   price: 4.00,  img: 'vinegret',  alg: ['mustard'],             menu: 'p' },
+  { id: 'rusa',      cat: 'salads',   price: 4.00,  img: 'rusa',      alg: ['mustard','egg','soy'], menu: 'p' },
+  { id: 'uzbeka',    cat: 'salads',   price: 4.00,  img: null,        alg: [],                      menu: 'p' },
+  { id: 'mimosa',    cat: 'salads',   price: 4.00,  img: 'mimosa',    alg: ['fish','egg','soy'],    menu: 'p' },
+  { id: 'samarkand', cat: 'salads',   price: 5.00,  img: 'samarkand', alg: ['egg','soy'],           menu: 'p' },
+  { id: 'shurpa',    cat: 'soups',    price: 10.00, img: null,        alg: [] },
+  { id: 'okroshka',  cat: 'soups',    price: 10.00, img: 'okroshka',  alg: ['soy','egg','milk'] },
+  { id: 'plov',      cat: 'mains',    price: 15.50, img: 'plov',      alg: [],                      menu: 's' },
+  { id: 'mantu',     cat: 'mains',    price: 3.00,  img: 'mantu',     alg: ['gluten'], unit: true,  menu: 's', menuUnits: 4 },
+  { id: 'sambusa',   cat: 'mains',    price: 4.00,  img: 'sambusa',   alg: ['egg','gluten','sesame'], unit: true, menu: 's', menuUnits: 3 },
+  { id: 'barak',     cat: 'mains',    price: 4.00,  img: 'barak',     alg: ['gluten'], unit: true,  menu: 's', menuUnits: 3 },
+  { id: 'golubsi',   cat: 'mains',    price: 15.00, img: 'golubsi',   alg: [],                      menu: 's' },
+  { id: 'pan',       cat: 'mains',    price: 4.00,  img: 'pan',       alg: ['gluten','sesame'], unit: true },
+  { id: 'medovik',   cat: 'desserts', price: 4.50,  img: 'medovik',   alg: ['egg','gluten','milk'] }
+];
+
+// group: soft, water, beer, hot.  menu:false = not included in the set menu
+const DRINKS = [
+  { id: 'cola',        group: 'soft',  price: 3.00, img: 'cocacola',      icon: 'can' },
+  { id: 'cola_zero',   group: 'soft',  price: 3.00, img: 'cocacola_zero', icon: 'can' },
+  { id: 'fanta_nar',   group: 'soft',  price: 3.00, img: 'fanta_naranja', icon: 'can' },
+  { id: 'fanta_lim',   group: 'soft',  price: 3.00, img: 'fanta_limon',            icon: 'can' },
+  { id: 'aquarius',    group: 'soft',  price: 3.00, img: 'aquarius',            icon: 'can' },
+  { id: 'nestea',      group: 'soft',  price: 3.00, img: 'nestea',            icon: 'can' },
+  { id: 'tonica',      group: 'soft',  price: 2.50, img: null,            icon: 'can' },
+  { id: 'natajtari',   group: 'soft',  price: 4.00, img: null,            icon: 'bottle', menu: false },
+  { id: 'vichy',       group: 'water', price: 3.50, img: 'vichy',         icon: 'can' },
+  { id: 'agua_gas',    group: 'water', price: 2.50, img: null,            icon: 'bottle' },
+  { id: 'agua_50',     group: 'water', price: 2.00, img: null,            icon: 'bottle' },
+  { id: 'agua_150',    group: 'water', price: 3.00, img: null,            icon: 'bottle' },
+  { id: 'quinto',      group: 'beer',  price: 2.50, img: null,            icon: 'beer' },
+  { id: 'mediana',     group: 'beer',  price: 3.00, img: null,            icon: 'beer' },
+  { id: 'damm00',      group: 'beer',  price: 3.00, img: null,            icon: 'beer' },
+  { id: 'vino_blanco', group: 'beer',  price: 3.50, img: null,            icon: 'wine' },
+  { id: 'vino_tinto',  group: 'beer',  price: 3.50, img: null,            icon: 'wine' },
+  { id: 'chupito',     group: 'beer',  price: 2.50, img: null,            icon: 'shot', menu: false },
+  { id: 'cafe_solo',   group: 'hot',   price: 1.50, img: null,            icon: 'cup' },
+  { id: 'cortado',     group: 'hot',   price: 1.80, img: null,            icon: 'cup' },
+  { id: 'cafe_leche',  group: 'hot',   price: 2.00, img: null,            icon: 'cup' },
+  { id: 'te_verde',    group: 'hot',   price: 5.00, img: null,            icon: 'tea', menu: false },
+  { id: 'te_negro',    group: 'hot',   price: 5.00, img: null,            icon: 'tea', menu: false }
+];
+
+const ICONS = {
+  can:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 3h8M7.5 5.5h9v14a1.5 1.5 0 0 1-1.5 1.5H9a1.5 1.5 0 0 1-1.5-1.5z"/><path d="M7.5 9h9M7.5 17h9"/></svg>',
+  bottle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M10 2.5h4v3l2 2.5v12a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 8 20V8l2-2.5z"/><path d="M8 12h8"/></svg>',
+  beer:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 7h10v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2z"/><path d="M16 10h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-2M6 7a3 3 0 0 1 3-3 3 3 0 0 1 4 0 3 3 0 0 1 3 3"/></svg>',
+  wine:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7.5 3h9l-.6 5.5a3.9 3.9 0 0 1-7.8 0z"/><path d="M12 12.5V20M8.5 21h7M8 7.5h8"/></svg>',
+  shot:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 5h10l-1.6 14.2a2 2 0 0 1-2 1.8h-2.8a2 2 0 0 1-2-1.8z"/><path d="M8 11h8"/></svg>',
+  cup:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16M9 3.5c0 1 1 1 1 2s-1 1-1 2M12.5 3.5c0 1 1 1 1 2s-1 1-1 2"/></svg>',
+  tea:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 10h11v3.5A5.5 5.5 0 0 1 10.5 19h0A5.5 5.5 0 0 1 5 13.5z"/><path d="M16 11.5l3-2.5M8 10V8.5a2.5 2.5 0 0 1 5 0V10M10.5 6V4.5M7 21h7"/></svg>'
+};
+
+/* ============================================================
+   TRANSLATIONS
+   ============================================================ */
+const T = {
+  es: {
+    tagline: 'Comida típica uzbeka', city: 'Barcelona',
+    cats: { menu: 'Menú del día', salads: 'Ensaladas', soups: 'Sopas', mains: 'Platos principales y horno', desserts: 'Postres', drinks: 'Bebidas' },
+    groups: { soft: 'Refrescos', water: 'Aguas', beer: 'Cervezas y vinos', hot: 'Café y té' },
+    setTitle: 'Menú del día', setIncl: 'Primero + segundo + bebida',
+    setPrimeros: 'Primeros: Vinegret, Uzbeka, Mimosa, Samarkand o Rusa.',
+    setSegundos: 'Segundos: Plov, Mantu (4 ud), Golubsi, Sambusa (3 ud) o Barak (3 ud).',
+    setNot: 'No incluye: postre, té uzbeko, Natajtari ni chupito.',
+    build: 'Elegir mi menú', first: 'Primero', second: 'Segundo', drink: 'Bebida',
+    chooseAll: 'Elige primero, segundo y bebida', addMenu: 'Añadir menú',
+    inMenu: 'En el menú', notInMenu: 'No incluido en el menú',
+    unit: 'ud', perUnit: '/ ud', add: 'Añadir', addToOrder: 'Añadir al pedido', update: 'Actualizar pedido', remove: 'Quitar',
+    allergens: 'Alérgenos', noAllergens: 'Sin alérgenos marcados en la carta',
+    alg: { gluten: 'Gluten', egg: 'Huevo', milk: 'Lácteos', fish: 'Pescado', mustard: 'Mostaza', soy: 'Soja', sesame: 'Sésamo' },
+    allergyTitle: '¿Alergias o intolerancias?', allergyText: 'Avisa al personal antes de pedir. Los alérgenos indicados son los de nuestra carta.',
+    photoSoon: 'Foto próximamente',
+    yourOrder: 'Tu pedido', viewOrder: 'Ver pedido', items: n => n === 1 ? '1 plato' : n + ' platos', total: 'Total',
+    table: 'Nº de mesa', tablePh: 'Ej.: 5', note: 'Comentario', notePh: 'Alergias, sin cebolla, poco picante…',
+    showWaiter: 'Mostrar al camarero', clear: 'Vaciar pedido', clearConfirm: 'Toca otra vez para vaciar', close: 'Cerrar', back: 'Volver',
+    empty: 'Tu pedido está vacío. Toca + en un plato para añadirlo.',
+    hint: 'Este pedido no se envía a la cocina. Muéstralo al camarero.',
+    added: 'Añadido al pedido', pricesNote: 'Precios en euros, IVA incluido.'
+  },
+  en: {
+    tagline: 'Traditional Uzbek cuisine', city: 'Barcelona',
+    cats: { menu: 'Set menu', salads: 'Salads', soups: 'Soups', mains: 'Mains & bakery', desserts: 'Desserts', drinks: 'Drinks' },
+    groups: { soft: 'Soft drinks', water: 'Water', beer: 'Beer & wine', hot: 'Coffee & tea' },
+    setTitle: 'Set menu of the day', setIncl: 'Starter + main + drink',
+    setPrimeros: 'Starters: Vinegret, Uzbek, Mimosa, Samarkand or Russian salad.',
+    setSegundos: 'Mains: Plov, Manti (4 pcs), Golubtsi, Samsa (3 pcs) or Barak (3 pcs).',
+    setNot: 'Not included: dessert, Uzbek tea, Natakhtari or shots.',
+    build: 'Build my set menu', first: 'Starter', second: 'Main course', drink: 'Drink',
+    chooseAll: 'Choose a starter, a main and a drink', addMenu: 'Add set menu',
+    inMenu: 'In set menu', notInMenu: 'Not in set menu',
+    unit: 'pc', perUnit: '/ pc', add: 'Add', addToOrder: 'Add to order', update: 'Update order', remove: 'Remove',
+    allergens: 'Allergens', noAllergens: 'No allergens marked on our menu',
+    alg: { gluten: 'Gluten', egg: 'Egg', milk: 'Milk', fish: 'Fish', mustard: 'Mustard', soy: 'Soy', sesame: 'Sesame' },
+    allergyTitle: 'Allergies or intolerances?', allergyText: 'Please tell our staff before ordering. Allergens shown are those listed on our printed menu.',
+    photoSoon: 'Photo coming soon',
+    yourOrder: 'Your order', viewOrder: 'View order', items: n => n === 1 ? '1 item' : n + ' items', total: 'Total',
+    table: 'Table no.', tablePh: 'e.g. 5', note: 'Note', notePh: 'Allergies, no onion, less spicy…',
+    showWaiter: 'Show to waiter', clear: 'Clear order', clearConfirm: 'Tap again to clear', close: 'Close', back: 'Back',
+    empty: 'Your order is empty. Tap + on a dish to add it.',
+    hint: 'This list is not sent to the kitchen. Show it to your waiter.',
+    added: 'Added to order', pricesNote: 'Prices in euros, VAT included.'
+  },
+  ru: {
+    tagline: 'Традиционная узбекская кухня', city: 'Барселона',
+    cats: { menu: 'Комплексный обед', salads: 'Салаты', soups: 'Супы', mains: 'Горячее и выпечка', desserts: 'Десерты', drinks: 'Напитки' },
+    groups: { soft: 'Прохладительные', water: 'Вода', beer: 'Пиво и вино', hot: 'Кофе и чай' },
+    setTitle: 'Комплексный обед', setIncl: 'Первое + второе + напиток',
+    setPrimeros: 'Первое: Винегрет, Узбекский, Мимоза, Самарканд или Оливье.',
+    setSegundos: 'Второе: Плов, Манты (4 шт), Голубцы, Самса (3 шт) или Барак (3 шт).',
+    setNot: 'Не входят: десерт, узбекский чай, «Натахтари» и шот.',
+    build: 'Собрать комплекс', first: 'Первое', second: 'Второе', drink: 'Напиток',
+    chooseAll: 'Выберите первое, второе и напиток', addMenu: 'Добавить комплекс',
+    inMenu: 'Входит в комплекс', notInMenu: 'Не входит в комплекс',
+    unit: 'шт', perUnit: '/ шт', add: 'Добавить', addToOrder: 'Добавить в заказ', update: 'Обновить заказ', remove: 'Убрать',
+    allergens: 'Аллергены', noAllergens: 'В меню аллергены не указаны',
+    alg: { gluten: 'Глютен', egg: 'Яйцо', milk: 'Молочное', fish: 'Рыба', mustard: 'Горчица', soy: 'Соя', sesame: 'Кунжут' },
+    allergyTitle: 'Есть аллергия или непереносимость?', allergyText: 'Пожалуйста, предупредите персонал до заказа. Указаны аллергены из нашего печатного меню.',
+    photoSoon: 'Фото скоро',
+    yourOrder: 'Ваш заказ', viewOrder: 'Смотреть заказ', items: n => n + ' ' + ruPlural(n, 'позиция', 'позиции', 'позиций'), total: 'Итого',
+    table: 'Номер столика', tablePh: 'Напр.: 5', note: 'Комментарий', notePh: 'Аллергия, без лука, не остро…',
+    showWaiter: 'Показать официанту', clear: 'Очистить заказ', clearConfirm: 'Нажмите ещё раз, чтобы очистить', close: 'Закрыть', back: 'Назад',
+    empty: 'Заказ пока пуст. Нажмите + у блюда, чтобы добавить.',
+    hint: 'Список не отправляется на кухню. Покажите его официанту.',
+    added: 'Добавлено в заказ', pricesNote: 'Цены в евро, НДС включён.'
+  },
+  uz: {
+    tagline: 'Anʼanaviy oʻzbek taomlari', city: 'Barselona',
+    cats: { menu: 'Kunlik menyu', salads: 'Salatlar', soups: 'Shoʻrvalar', mains: 'Asosiy taomlar va pishiriqlar', desserts: 'Desertlar', drinks: 'Ichimliklar' },
+    groups: { soft: 'Salqin ichimliklar', water: 'Suvlar', beer: 'Pivo va vino', hot: 'Qahva va choy' },
+    setTitle: 'Kunlik menyu', setIncl: 'Birinchi taom + ikkinchi taom + ichimlik',
+    setPrimeros: 'Birinchi: Vinegret, Achchiq-chuchuk, Mimoza, Samarqand yoki Olivye.',
+    setSegundos: 'Ikkinchi: Palov, Manti (4 dona), Doʻlma, Somsa (3 dona) yoki Barak (3 dona).',
+    setNot: 'Kirmaydi: desert, oʻzbek choyi, Natakhtari va shot.',
+    build: 'Menyuni tanlash', first: 'Birinchi taom', second: 'Ikkinchi taom', drink: 'Ichimlik',
+    chooseAll: 'Birinchi, ikkinchi taom va ichimlikni tanlang', addMenu: 'Menyuni qoʻshish',
+    inMenu: 'Menyuga kiradi', notInMenu: 'Kunlik menyuga kirmaydi',
+    unit: 'dona', perUnit: '/ dona', add: 'Qoʻshish', addToOrder: 'Buyurtmaga qoʻshish', update: 'Buyurtmani yangilash', remove: 'Olib tashlash',
+    allergens: 'Allergenlar', noAllergens: 'Menyuda allergen koʻrsatilmagan',
+    alg: { gluten: 'Kleykovina', egg: 'Tuxum', milk: 'Sut', fish: 'Baliq', mustard: 'Xantal', soy: 'Soya', sesame: 'Kunjut' },
+    allergyTitle: 'Allergiya yoki oziq-ovqat koʻtara olmaslik?', allergyText: 'Buyurtmadan oldin xodimlarga ayting. Allergenlar bosma menyumiz asosida koʻrsatilgan.',
+    photoSoon: 'Rasm tez orada',
+    yourOrder: 'Buyurtmangiz', viewOrder: 'Buyurtmani koʻrish', items: n => n + ' ta taom', total: 'Jami',
+    table: 'Stol raqami', tablePh: 'Masalan: 5', note: 'Izoh', notePh: 'Allergiya, piyozsiz, achchiq emas…',
+    showWaiter: 'Ofitsiantga koʻrsatish', clear: 'Buyurtmani tozalash', clearConfirm: 'Tozalash uchun yana bosing', close: 'Yopish', back: 'Orqaga',
+    empty: 'Buyurtma hozircha boʻsh. Taomni qoʻshish uchun + tugmasini bosing.',
+    hint: 'Roʻyxat oshxonaga yuborilmaydi. Uni ofitsiantga koʻrsating.',
+    added: 'Buyurtmaga qoʻshildi', pricesNote: 'Narxlar yevroda, QQS bilan.'
+  },
+  fr: {
+    tagline: 'Cuisine traditionnelle ouzbèke', city: 'Barcelone',
+    cats: { menu: 'Menu du jour', salads: 'Salades', soups: 'Soupes', mains: 'Plats et four', desserts: 'Desserts', drinks: 'Boissons' },
+    groups: { soft: 'Sodas', water: 'Eaux', beer: 'Bières et vins', hot: 'Café et thé' },
+    setTitle: 'Menu du jour', setIncl: 'Entrée + plat + boisson',
+    setPrimeros: 'Entrées : Vinegret, ouzbèke, Mimosa, Samarkand ou salade russe.',
+    setSegundos: 'Plats : Plov, Manti (4 pièces), Golubtsi, Samsa (3 pièces) ou Barak (3 pièces).',
+    setNot: 'Non compris : dessert, thé ouzbek, Natakhtari et shot.',
+    build: 'Composer mon menu', first: 'Entrée', second: 'Plat', drink: 'Boisson',
+    chooseAll: 'Choisissez une entrée, un plat et une boisson', addMenu: 'Ajouter le menu',
+    inMenu: 'Compris dans le menu', notInMenu: 'Hors menu du jour',
+    unit: 'pièce', perUnit: '/ pièce', add: 'Ajouter', addToOrder: 'Ajouter à la commande', update: 'Mettre à jour', remove: 'Retirer',
+    allergens: 'Allergènes', noAllergens: 'Aucun allergène indiqué sur notre carte',
+    alg: { gluten: 'Gluten', egg: 'Œuf', milk: 'Lait', fish: 'Poisson', mustard: 'Moutarde', soy: 'Soja', sesame: 'Sésame' },
+    allergyTitle: 'Allergies ou intolérances ?', allergyText: 'Prévenez le personnel avant de commander. Les allergènes affichés sont ceux de notre carte imprimée.',
+    photoSoon: 'Photo bientôt',
+    yourOrder: 'Votre commande', viewOrder: 'Voir la commande', items: n => n === 1 ? '1 article' : n + ' articles', total: 'Total',
+    table: 'N° de table', tablePh: 'Ex. : 5', note: 'Remarque', notePh: 'Allergies, sans oignon, peu épicé…',
+    showWaiter: 'Montrer au serveur', clear: 'Vider la commande', clearConfirm: 'Touchez encore pour vider', close: 'Fermer', back: 'Retour',
+    empty: 'Votre commande est vide. Touchez + sur un plat pour l’ajouter.',
+    hint: 'Cette liste n’est pas envoyée en cuisine. Montrez-la au serveur.',
+    added: 'Ajouté à la commande', pricesNote: 'Prix en euros, TVA comprise.'
+  }
+};
+function ruPlural(n, one, few, many) {
+  const m10 = n % 10, m100 = n % 100;
+  if (m10 === 1 && m100 !== 11) return one;
+  if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few;
+  return many;
+}
+
+// dish names + descriptions [name, description]
+const D = {
+  vinegret: {
+    es: ['Ensalada Vinegret', 'Remolacha, patata, zanahoria, cebolla, pepinillos, guisantes y aceite.'],
+    en: ['Vinegret salad', 'Beetroot, potato, carrot, onion, pickles, green peas and oil.'],
+    ru: ['Салат «Винегрет»', 'Свёкла, картофель, морковь, лук, солёные огурцы, зелёный горошек, масло.'],
+    uz: ['Vinegret salati', 'Lavlagi, kartoshka, sabzi, piyoz, tuzlangan bodring, koʻk noʻxat va yogʻ.'],
+    fr: ['Salade Vinegret', 'Betterave, pomme de terre, carotte, oignon, cornichons, petits pois et huile.']
+  },
+  rusa: {
+    es: ['Ensalada Rusa', 'Patata, zanahoria, pepinillos, huevo, mortadela de pollo, guisantes y mayonesa.'],
+    en: ['Russian salad (Olivier)', 'Potato, carrot, pickles, egg, chicken mortadella, green peas and mayonnaise.'],
+    ru: ['Салат «Оливье»', 'Картофель, морковь, маринованные огурцы, яйцо, куриная колбаса, горошек, майонез.'],
+    uz: ['Olivye salati', 'Kartoshka, sabzi, tuzlangan bodring, tuxum, tovuq kolbasasi, koʻk noʻxat va mayonez.'],
+    fr: ['Salade russe (Olivier)', 'Pomme de terre, carotte, cornichons, œuf, mortadelle de poulet, petits pois et mayonnaise.']
+  },
+  uzbeka: {
+    es: ['Ensalada Uzbeka (Achichuk)', 'Tomate maduro, pepino y cebolla dulce cortada muy fina.'],
+    en: ['Uzbek salad (Achichuk)', 'Ripe tomato, cucumber and thinly sliced sweet onion.'],
+    ru: ['Салат «Аччик-чучук»', 'Спелые томаты, свежие огурцы, сладкий тонкий лук.'],
+    uz: ['Achchiq-chuchuk salati', 'Pishgan pomidor, bodring va yupqa toʻgʻralgan shirin piyoz.'],
+    fr: ['Salade ouzbèke (Achichuk)', 'Tomate mûre, concombre et oignon doux émincé finement.']
+  },
+  mimosa: {
+    es: ['Ensalada Mimosa', 'Ensalada por capas: patata, zanahoria, cebolla, sardinas, mayonesa y huevo rallado.'],
+    en: ['Mimosa salad', 'Layered salad: potato, carrot, onion, sardines, mayonnaise and grated egg.'],
+    ru: ['Салат «Мимоза»', 'Слоёный салат: картофель, морковь, лук, сардины, майонез, тёртое яйцо.'],
+    uz: ['Mimoza salati', 'Qatlamli salat: kartoshka, sabzi, piyoz, sardina, mayonez va qirilgan tuxum.'],
+    fr: ['Salade Mimosa', 'Salade en couches : pomme de terre, carotte, oignon, sardines, mayonnaise et œuf râpé.']
+  },
+  samarkand: {
+    es: ['Ensalada Samarkand', 'Col, zanahoria, pepino, ajo, mortadela de pollo, patatas paja crujientes y mayonesa.'],
+    en: ['Samarkand salad', 'Cabbage, carrot, cucumber, garlic, chicken mortadella, crispy straw potatoes and mayonnaise.'],
+    ru: ['Салат «Самарканд»', 'Капуста, морковь, огурец, чеснок, куриная колбаса, хрустящий картофель пай, майонез.'],
+    uz: ['Samarqand salati', 'Karam, sabzi, bodring, sarimsoq, tovuq kolbasasi, qarsildoq somoncha kartoshka va mayonez.'],
+    fr: ['Salade Samarkand', 'Chou, carotte, concombre, ail, mortadelle de poulet, pommes paille croustillantes et mayonnaise.']
+  },
+  shurpa: {
+    es: ['Shurpa', 'Caldo casero bien sabroso con ternera, garbanzos, patata, zanahoria, cebolla y hierbas frescas.'],
+    en: ['Shurpa', 'Rich homemade broth with beef, chickpeas, potato, carrot, onion and fresh herbs.'],
+    ru: ['Шурпа', 'Наваристый бульон с говядиной, нутом, картофелем, морковью, луком и зеленью.'],
+    uz: ['Shoʻrva', 'Mol goʻshti, noʻxat, kartoshka, sabzi, piyoz va koʻkatlar bilan quyuq shoʻrva.'],
+    fr: ['Chorba (Shurpa)', 'Bouillon maison corsé au bœuf, pois chiches, pomme de terre, carotte, oignon et herbes fraîches.']
+  },
+  okroshka: {
+    es: ['Okroshka', 'Sopa fría y refrescante con yogur griego: patata, huevo, mortadela de pollo, eneldo, rábano y pepino.'],
+    en: ['Okroshka', 'Refreshing cold soup with Greek yoghurt: potato, egg, chicken mortadella, dill, radish and cucumber.'],
+    ru: ['Окрошка', 'Освежающий холодный суп на греческом йогурте: картофель, яйцо, куриная колбаса, укроп, редис, свежий огурец.'],
+    uz: ['Okroshka', 'Grek yogurtidagi salqin sovuq shoʻrva: kartoshka, tuxum, tovuq kolbasasi, ukrop, rediska va bodring.'],
+    fr: ['Okroshka', 'Soupe froide rafraîchissante au yaourt grec : pomme de terre, œuf, mortadelle de poulet, aneth, radis et concombre.']
+  },
+  plov: {
+    es: ['Plov', 'Plov de Samarcanda: ternera tierna, arroz, zanahoria amarilla y roja, cebolla y especias orientales.'],
+    en: ['Plov', 'Samarkand-style plov: tender beef, rice, yellow and red carrots, onion and eastern spices.'],
+    ru: ['Плов', 'Самаркандский плов: нежная говядина, рис, жёлтая и красная морковь, лук, восточные специи.'],
+    uz: ['Palov (osh)', 'Samarqand oshi: yumshoq mol goʻshti, guruch, sariq va qizil sabzi, piyoz va sharqona ziravorlar.'],
+    fr: ['Plov', 'Plov de Samarcande : bœuf fondant, riz, carottes jaunes et rouges, oignon et épices orientales.']
+  },
+  mantu: {
+    es: ['Mantu', 'Empanadillas uzbekas al vapor rellenas de ternera picada, cebolla y comino.'],
+    en: ['Manti', 'Steamed Uzbek dumplings filled with minced beef, onion and cumin.'],
+    ru: ['Манты', 'Узбекские манты на пару: рубленая говядина с луком и зирой.'],
+    uz: ['Manti', 'Bugʻda pishirilgan manti: qiyma mol goʻshti, piyoz va zira.'],
+    fr: ['Manti', 'Raviolis ouzbeks à la vapeur, farcis au bœuf haché, oignon et cumin.']
+  },
+  sambusa: {
+    es: ['Sambusa', 'Hojaldre al horno relleno de carne picada y cebolla, con sésamo por encima.'],
+    en: ['Samsa', 'Oven-baked puff pastry filled with minced beef and onion, topped with sesame.'],
+    ru: ['Самса', 'Слоёная самса из духовки с говядиной и луком, посыпанная кунжутом.'],
+    uz: ['Somsa', 'Pechda pishirilgan qatlama somsa: qiyma goʻsht va piyoz, ustiga kunjut sepilgan.'],
+    fr: ['Samsa', 'Feuilleté cuit au four, farci de bœuf haché et oignon, parsemé de sésame.']
+  },
+  barak: {
+    es: ['Barak', 'Masa de hojaldre frita y crujiente rellena de ternera picada y cebolla.'],
+    en: ['Barak', 'Crispy fried pastry filled with minced beef and onion.'],
+    ru: ['Барак (чебурек)', 'Хрустящий жареный пирожок с рубленой говядиной и луком.'],
+    uz: ['Barak (cheburek)', 'Qiyma mol goʻshti va piyoz bilan qovurilgan qarsildoq pirog.'],
+    fr: ['Barak', 'Chausson frit et croustillant, farci de bœuf haché et oignon.']
+  },
+  golubsi: {
+    es: ['Golubsi', 'Hoja de col y pimiento rojo rellenos de ternera picada y arroz, guisados con patata y zanahoria.'],
+    en: ['Golubtsi', 'Cabbage leaf and red pepper stuffed with minced beef and rice, braised with potato and carrot.'],
+    ru: ['Голубцы', 'Капустный лист и красный перец, фаршированные говядиной и рисом, тушённые с картофелем и морковью.'],
+    uz: ['Doʻlma', 'Qiyma goʻsht va guruch bilan toʻldirilgan karam bargi va qizil qalampir, kartoshka va sabzi bilan dimlangan.'],
+    fr: ['Golubtsi', 'Feuille de chou et poivron rouge farcis au bœuf haché et riz, mijotés avec pomme de terre et carotte.']
+  },
+  pan: {
+    es: ['Pan Uzbeko', 'Pan redondo tradicional uzbeko con sésamo, recién horneado.'],
+    en: ['Uzbek bread', 'Traditional round Uzbek flatbread with sesame, freshly baked.'],
+    ru: ['Узбекская лепёшка', 'Традиционная тандырная лепёшка с кунжутом.'],
+    uz: ['Oʻzbek noni', 'Kunjut sepilgan anʼanaviy tandir non.'],
+    fr: ['Pain ouzbek', 'Pain rond traditionnel ouzbek au sésame, tout juste cuit.']
+  },
+  medovik: {
+    es: ['Tarta Medovik', 'Pastel clásico de miel por capas con crema suave. Ración.'],
+    en: ['Medovik honey cake', 'Classic layered honey cake with soft cream. One slice.'],
+    ru: ['Торт «Медовик»', 'Классический медовик с нежным кремом. Порция.'],
+    uz: ['Medovik torti', 'Yumshoq kremli klassik asalli qatlama tort. Bir porsiya.'],
+    fr: ['Gâteau Medovik', 'Gâteau au miel en couches, crème onctueuse. Une part.']
+  }
+};
+
+// drink names [name, sub]
+const DN = {
+  cola:        { es: ['Coca-Cola'], en: ['Coca-Cola'], ru: ['Coca-Cola'], uz: ['Coca-Cola'], fr: ['Coca-Cola'] },
+  cola_zero:   { es: ['Coca-Cola Zero', 'Sin azúcar'], en: ['Coca-Cola Zero', 'No sugar'], ru: ['Coca-Cola Zero', 'Без сахара'], uz: ['Coca-Cola Zero', 'Shakarsiz'], fr: ['Coca-Cola Zero', 'Sans sucre'] },
+  fanta_nar:   { es: ['Fanta Naranja'], en: ['Fanta Orange'], ru: ['Fanta апельсин'], uz: ['Fanta apelsin'], fr: ['Fanta Orange'] },
+  fanta_lim:   { es: ['Fanta Limón'], en: ['Fanta Lemon'], ru: ['Fanta лимон'], uz: ['Fanta limon'], fr: ['Fanta Citron'] },
+  aquarius:    { es: ['Aquarius Naranja'], en: ['Aquarius Orange'], ru: ['Aquarius апельсин'], uz: ['Aquarius apelsin'], fr: ['Aquarius Orange'] },
+  nestea:      { es: ['Nestea Limón', 'Té frío'], en: ['Nestea Lemon', 'Iced tea'], ru: ['Nestea лимон', 'Холодный чай'], uz: ['Nestea limon', 'Sovuq choy'], fr: ['Nestea Citron', 'Thé glacé'] },
+  tonica:      { es: ['Tónica'], en: ['Tonic water'], ru: ['Тоник'], uz: ['Tonik'], fr: ['Tonic'] },
+  natajtari:   { es: ['Limonada Natajtari', 'Limonada georgiana'], en: ['Natakhtari lemonade', 'Georgian lemonade'], ru: ['Лимонад «Натахтари»', 'Грузинский лимонад'], uz: ['Natakhtari limonadi', 'Gruzin limonadi'], fr: ['Limonade Natakhtari', 'Limonade géorgienne'] },
+  vichy:       { es: ['Vichy Catalán', 'Agua mineral con gas natural'], en: ['Vichy Catalán', 'Naturally sparkling mineral water'], ru: ['Vichy Catalán', 'Природная минеральная вода с газом'], uz: ['Vichy Catalán', 'Tabiiy gazli mineral suv'], fr: ['Vichy Catalán', 'Eau minérale naturellement gazeuse'] },
+  agua_gas:    { es: ['Agua con gas'], en: ['Sparkling water'], ru: ['Вода с газом'], uz: ['Gazli suv'], fr: ['Eau gazeuse'] },
+  agua_50:     { es: ['Agua pequeña', '50 cl'], en: ['Still water, small', '50 cl'], ru: ['Вода маленькая', '0,5 л'], uz: ['Suv, kichik', '0,5 l'], fr: ['Eau plate, petite', '50 cl'] },
+  agua_150:    { es: ['Agua grande', '1,5 L'], en: ['Still water, large', '1.5 L'], ru: ['Вода большая', '1,5 л'], uz: ['Suv, katta', '1,5 l'], fr: ['Eau plate, grande', '1,5 L'] },
+  quinto:      { es: ['Estrella Damm quinto', 'Botellín 20 cl'], en: ['Estrella Damm beer, small', '20 cl bottle'], ru: ['Пиво Estrella Damm, малое', 'Бутылочка 0,2 л'], uz: ['Estrella Damm pivosi, kichik', '0,2 l shisha'], fr: ['Bière Estrella Damm, petite', 'Bouteille 20 cl'] },
+  mediana:     { es: ['Estrella Damm mediana', 'Botella 33 cl'], en: ['Estrella Damm beer', '33 cl bottle'], ru: ['Пиво Estrella Damm', 'Бутылка 0,33 л'], uz: ['Estrella Damm pivosi', '0,33 l shisha'], fr: ['Bière Estrella Damm', 'Bouteille 33 cl'] },
+  damm00:      { es: ['Estrella Damm 0,0 mediana', 'Sin alcohol · 33 cl'], en: ['Estrella Damm alcohol-free', '33 cl bottle'], ru: ['Estrella Damm безалкогольное', 'Бутылка 0,33 л'], uz: ['Estrella Damm alkogolsiz', '0,33 l shisha'], fr: ['Estrella Damm sans alcool', 'Bouteille 33 cl'] },
+  vino_blanco: { es: ['Copa de vino blanco'], en: ['Glass of white wine'], ru: ['Бокал белого вина'], uz: ['Bir qadah oq vino'], fr: ['Verre de vin blanc'] },
+  vino_tinto:  { es: ['Copa de vino tinto'], en: ['Glass of red wine'], ru: ['Бокал красного вина'], uz: ['Bir qadah qizil vino'], fr: ['Verre de vin rouge'] },
+  chupito:     { es: ['Chupito'], en: ['Shot'], ru: ['Шот'], uz: ['Shot (qadahcha)'], fr: ['Shot'] },
+  cafe_solo:   { es: ['Café solo'], en: ['Espresso'], ru: ['Эспрессо'], uz: ['Espresso'], fr: ['Café (expresso)'] },
+  cortado:     { es: ['Cortado'], en: ['Cortado', 'Espresso with a dash of milk'], ru: ['Кортадо', 'Эспрессо с каплей молока'], uz: ['Kortado', 'Ozgina sut qoʻshilgan espresso'], fr: ['Cortado', 'Expresso noisette'] },
+  cafe_leche:  { es: ['Café con leche'], en: ['Coffee with milk'], ru: ['Кофе с молоком'], uz: ['Sutli qahva'], fr: ['Café au lait'] },
+  te_verde:    { es: ['Té verde uzbeko', 'Tetera'], en: ['Uzbek green tea', 'Teapot'], ru: ['Узбекский зелёный чай', 'Чайник'], uz: ['Koʻk choy', 'Choynak'], fr: ['Thé vert ouzbek', 'Théière'] },
+  te_negro:    { es: ['Té negro uzbeko', 'Tetera'], en: ['Uzbek black tea', 'Teapot'], ru: ['Узбекский чёрный чай', 'Чайник'], uz: ['Qora choy', 'Choynak'], fr: ['Thé noir ouzbek', 'Théière'] }
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('samarkand_' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('samarkand_' + k, JSON.stringify(v)); } catch (e) {} }
+};
+
+function detectLang() {
+  const saved = store.get('lang', null);
+  if (saved && T[saved]) return saved;
+  const prefs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'es']);
+  for (const p of prefs) {
+    const c = String(p).toLowerCase().slice(0, 2);
+    if (T[c]) return c;
+    if (c === 'ca' || c === 'gl' || c === 'eu') return 'es';
+  }
+  return 'es';
+}
+
+let lang = detectLang();
+let cart = store.get('cart', {});           // key -> qty ; keys: dish/drink id or "menu|p|s|b"
+let mesa = store.get('mesa', '');
+let note = store.get('note', '');
+(function readTableFromUrl() {
+  try {
+    const q = new URLSearchParams(location.search).get('mesa');
+    const h = (location.hash || '').match(/mesa-?(\d{1,3})/i);
+    const v = q || (h && h[1]);
+    if (v) { mesa = String(v); store.set('mesa', mesa); }
+  } catch (e) {}
+})();
+
+const byId = Object.fromEntries([...DISHES, ...DRINKS].map(x => [x.id, x]));
+const t = () => T[lang];
+const L = () => LANGS.find(l => l.code === lang);
+const isDrink = id => DRINKS.some(d => d.id === id);
+const nameOf = (id, lg = lang) => isDrink(id) ? DN[id][lg][0] : D[id][lg][0];
+const subOf = (id, lg = lang) => isDrink(id) ? (DN[id][lg][1] || '') : D[id][lg][1];
+
+function fmt(n, lg = lang) {
+  const loc = LANGS.find(l => l.code === lg).locale;
+  try { return new Intl.NumberFormat(loc, { style: 'currency', currency: 'EUR' }).format(n); }
+  catch (e) { return n.toFixed(2).replace('.', ',') + ' €'; }
+}
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function imgTag(name, alt, cls = '') {
+  return name ? `<img src="img/${name}.webp" alt="${esc(alt)}" loading="lazy" decoding="async" ${cls ? `class="${cls}"` : ''}>`
+              : `<div class="placeholder"><span>${esc(t().photoSoon)}</span></div>`;
+}
+const starSvg = '<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1.5l2.6 4.2 4.8-1.2-1.2 4.8L22.5 12l-4.3 2.7 1.2 4.8-4.8-1.2L12 22.5l-2.6-4.2-4.8 1.2 1.2-4.8L1.5 12l4.3-2.7-1.2-4.8 4.8 1.2z"/></svg>';
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function renderLangs() {
+  document.getElementById('langs').innerHTML = LANGS.map(l =>
+    `<button type="button" class="lang" data-lang="${l.code}" aria-pressed="${l.code === lang}" aria-label="${esc(l.name)}" lang="${l.code}">
+       <span class="flag" aria-hidden="true">${l.flag}</span><span>${l.label}</span></button>`).join('');
+}
+
+function priceHtml(item) {
+  return `${fmt(item.price)}${item.unit ? ` <small>${esc(t().perUnit)}</small>` : ''}`;
+}
+
+function qtyControl(id) {
+  const q = cart[id] || 0;
+  if (!q) return `<button type="button" class="add" data-add="${id}" aria-label="${esc(t().add)}: ${esc(nameOf(id))}">+</button>`;
+  return `<span class="stepper" role="group" aria-label="${esc(nameOf(id))}">
+            <button type="button" data-dec="${id}" aria-label="−">−</button><b>${q}</b>
+            <button type="button" data-add="${id}" aria-label="+">+</button></span>`;
+}
+
+function dishCard(d) {
+  const [nm, desc] = D[d.id][lang];
+  const badges = d.alg.map(a => `<span class="badge">${esc(t().alg[a])}</span>`).join('');
+  return `<article class="card" data-open="${d.id}" tabindex="0" role="button" aria-label="${esc(nm)}">
+    <div class="ph">${imgTag(d.img, nm)}${d.menu ? `<span class="tag-menu">${esc(t().inMenu)}</span>` : ''}</div>
+    <div class="body">
+      <div class="top"><h3>${esc(nm)}</h3><span class="price-tag">${priceHtml(d)}</span></div>
+      <p>${esc(desc)}</p>
+      <div class="foot"><div class="badges">${badges}</div><span data-qty="${d.id}">${qtyControl(d.id)}</span></div>
+    </div>
+  </article>`;
+}
+
+function drinkRow(d) {
+  const [nm, sub] = DN[d.id][lang];
+  const extra = d.menu === false ? `<span class="nomenu">${esc(t().notInMenu)}</span>` : (sub ? `<span>${esc(sub)}</span>` : '');
+  const subLine = d.menu === false && sub ? `<span>${esc(sub)}</span>` : '';
+  return `<div class="drink">
+    <button type="button" class="thumb" data-open="${d.id}" aria-label="${esc(nm)}" tabindex="-1">${d.img ? `<img src="img/${d.img}.webp" alt="" loading="lazy">` : ICONS[d.icon]}</button>
+    <button type="button" class="info" data-open="${d.id}"><b>${esc(nm)}</b>${subLine}${extra}</button>
+    <span class="price-tag">${fmt(d.price)}</span>
+    <span data-qty="${d.id}">${qtyControl(d.id)}</span>
+  </div>`;
+}
+
+function section(id, title, inner) {
+  return `<section class="cat" id="${id}"><div class="cat-head">${starSvg}<h2>${esc(title)}</h2><span class="rule"></span></div>${inner}</section>`;
+}
+
+function render() {
+  document.documentElement.lang = lang === 'uz' ? 'uz-Latn' : lang;
+  const tr = t();
+  document.getElementById('tagline').textContent = tr.tagline;
+  document.getElementById('city').textContent = tr.city;
+  document.getElementById('pricesNote').textContent = tr.pricesNote;
+  renderLangs();
+
+  const cats = ['menu', 'salads', 'soups', 'mains', 'desserts', 'drinks'];
+  document.getElementById('chips').innerHTML = cats.map(c => `<a class="chip" href="#sec-${c}" data-chip="${c}">${esc(tr.cats[c])}</a>`).join('');
+
+  let html = `<section class="cat" id="sec-menu" style="padding-top:8px"><div class="setmenu">
+      <div class="row"><h2>${esc(tr.setTitle)}</h2><span class="price">${fmt(MENU_PRICE)}</span></div>
+      <div class="incl"><strong>${esc(tr.setIncl)}</strong></div>
+      <div class="incl">${esc(tr.setPrimeros)}<br>${esc(tr.setSegundos)}</div>
+      <div class="small">${esc(tr.setNot)}</div>
+      <div><button type="button" class="btn-primary" id="buildMenu">${esc(tr.build)}</button></div>
+    </div></section>`;
+
+  for (const c of ['salads', 'soups', 'mains', 'desserts']) {
+    html += section('sec-' + c, tr.cats[c], `<div class="grid">${DISHES.filter(d => d.cat === c).map(dishCard).join('')}</div>`);
+  }
+  const groups = ['soft', 'water', 'beer', 'hot'];
+  html += section('sec-drinks', tr.cats.drinks, `<div class="dgrid">${groups.map(g =>
+    `<div class="dgroup"><h3>${esc(tr.groups[g])}</h3>${DRINKS.filter(d => d.group === g).map(drinkRow).join('')}</div>`).join('')}</div>`);
+  document.getElementById('content').innerHTML = html;
+
+  document.getElementById('allergyNote').innerHTML =
+    `<strong>${esc(tr.allergyTitle)}</strong><span>${esc(tr.allergyText)}</span>`;
+  renderBar();
+  spy();
+}
+
+function refreshQty() {
+  document.querySelectorAll('[data-qty]').forEach(el => { el.innerHTML = qtyControl(el.dataset.qty); });
+  renderBar();
+}
+
+/* ---------- cart math ---------- */
+function lineInfo(key) {
+  if (key.startsWith('menu|')) {
+    const [, p, s, b] = key.split('|');
+    return { price: MENU_PRICE, isMenu: true, p, s, b };
+  }
+  return { price: byId[key] ? byId[key].price : 0 };
+}
+function cartCount() { return Object.values(cart).reduce((a, b) => a + b, 0); }
+function cartTotal() { return Object.entries(cart).reduce((s, [k, q]) => s + lineInfo(k).price * q, 0); }
+function save() { store.set('cart', cart); }
+
+function addItem(key, n = 1) {
+  if (key !== '__' && !key.startsWith('menu|') && !byId[key]) return;
+  cart[key] = Math.max(0, (cart[key] || 0) + n);
+  if (!cart[key]) delete cart[key];
+  save(); refreshQty();
+}
+
+function renderBar() {
+  const n = cartCount();
+  const bar = document.getElementById('orderbar');
+  bar.classList.toggle('hide', n === 0);
+  document.getElementById('openCart').innerHTML =
+    `<span style="display:flex;align-items:center;gap:10px"><span class="count">${n}</span>${esc(t().viewOrder)}</span><span class="sum">${fmt(cartTotal())}</span>`;
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(() => el.classList.remove('show'), 1400);
+}
+
+/* ---------- sheet ---------- */
+let lastFocus = null;
+function openSheet(html) {
+  const sh = document.getElementById('sheet'), bd = document.getElementById('backdrop');
+  lastFocus = document.activeElement;
+  sh.innerHTML = `<div class="grab" aria-hidden="true"></div><button type="button" class="close" data-close aria-label="${esc(t().close)}">×</button>${html}`;
+  sh.hidden = false; bd.hidden = false; sh.scrollTop = 0;
+  requestAnimationFrame(() => { sh.classList.add('open'); bd.classList.add('open'); });
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => { const f = sh.querySelector('.close'); f && f.focus({ preventScroll: true }); }, 50);
+}
+function closeSheet() {
+  const sh = document.getElementById('sheet'), bd = document.getElementById('backdrop');
+  sh.classList.remove('open'); bd.classList.remove('open');
+  document.body.style.overflow = '';
+  setTimeout(() => { sh.hidden = true; bd.hidden = true; sh.innerHTML = ''; }, 260);
+  sheetMode = null;
+  if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+}
+let sheetMode = null;
+
+function openItem(id) {
+  const it = byId[id]; if (!it) return;
+  sheetMode = { type: 'item', id, qty: Math.max(1, cart[id] || 1) };
+  const tr = t(), drink = isDrink(id);
+  const nm = nameOf(id), desc = subOf(id);
+  const alg = drink ? '' : `<div><div class="label">${esc(tr.allergens)}</div>
+      <div class="badges" style="margin-top:6px">${it.alg.length ? it.alg.map(a => `<span class="badge">${esc(tr.alg[a])}</span>`).join('') : `<span class="hint">${esc(tr.noAllergens)}</span>`}</div></div>`;
+  const menuNote = drink ? (it.menu === false ? `<span class="badge">${esc(tr.notInMenu)}</span>` : `<span class="badge" style="background:var(--pahta-soft);color:var(--pahta)">${esc(tr.inMenu)}</span>`)
+                         : (it.menu ? `<span class="badge" style="background:var(--pahta-soft);color:var(--pahta)">${esc(tr.inMenu)}${it.menuUnits ? ` · ${it.menuUnits} ${esc(tr.unit)}` : ''}</span>` : '');
+  const hero = (it.img) ? `<div class="hero"><img src="img/${it.img}.webp" alt="${esc(nm)}"></div>` :
+               (drink ? '' : `<div class="hero">${imgTag(null, nm)}</div>`);
+  openSheet(`${hero}<div class="inner">
+      <div style="display:grid;gap:6px"><h2>${esc(nm)}</h2>
+        <div class="price-tag" style="font-size:20px">${priceHtml(it)}</div></div>
+      ${desc ? `<p class="desc">${esc(desc)}</p>` : ''}
+      ${menuNote ? `<div class="badges">${menuNote}</div>` : ''}
+      ${alg}
+      <div class="actions">
+        <span class="stepper"><button type="button" data-sq="-1" aria-label="−">−</button><b id="sq">${sheetMode.qty}</b><button type="button" data-sq="1" aria-label="+">+</button></span>
+        <button type="button" class="btn-primary" data-sheet-add>${esc(cart[id] ? tr.update : tr.addToOrder)} · <span id="sqp">${fmt(it.price * sheetMode.qty)}</span></button>
+      </div>
+      ${cart[id] ? `<button type="button" class="btn-ghost" data-sheet-remove>${esc(tr.remove)}</button>` : ''}
+    </div>`);
+}
+
+/* ---------- set menu builder ---------- */
+function openBuilder(pre) {
+  sheetMode = { type: 'menu', p: null, s: null, b: null, ...(pre || {}) };
+  drawBuilder();
+}
+function optBtn(kind, id, label, extra, img, icon) {
+  const sel = sheetMode[kind] === id;
+  const pic = img ? `<img src="img/${img}.webp" alt="" loading="lazy">` : `<span class="ico">${icon ? ICONS[icon] : ''}</span>`;
+  return `<button type="button" class="opt" role="radio" aria-checked="${sel}" data-pick="${kind}" data-val="${id}">
+      ${pic}<span>${esc(label)}${extra ? ` <small>${esc(extra)}</small>` : ''}</span><i class="tick" aria-hidden="true"></i></button>`;
+}
+function drawBuilder() {
+  const tr = t(), m = sheetMode;
+  const prim = DISHES.filter(d => d.menu === 'p').map(d => optBtn('p', d.id, nameOf(d.id), '', d.img, 'cup')).join('');
+  const seg = DISHES.filter(d => d.menu === 's').map(d => optBtn('s', d.id, nameOf(d.id), d.menuUnits ? `· ${d.menuUnits} ${tr.unit}` : '', d.img)).join('');
+  const beb = DRINKS.filter(d => d.menu !== false).map(d => optBtn('b', d.id, nameOf(d.id), DN[d.id][lang][1] || '', d.img, d.icon)).join('');
+  const ready = m.p && m.s && m.b;
+  const scroll = document.getElementById('sheet').scrollTop;
+  openSheetKeep(`<div class="inner" style="padding-top:22px">
+      <div style="display:grid;gap:4px"><h2>${esc(tr.setTitle)}</h2><div class="price-tag" style="font-size:20px">${fmt(MENU_PRICE)}</div>
+        <p class="hint">${esc(tr.setIncl)}. ${esc(tr.setNot)}</p></div>
+      <h3 class="step-title">1 · ${esc(tr.first)}</h3><div class="opt-group" role="radiogroup" aria-label="${esc(tr.first)}">${prim}</div>
+      <h3 class="step-title">2 · ${esc(tr.second)}</h3><div class="opt-group" role="radiogroup" aria-label="${esc(tr.second)}">${seg}</div>
+      <h3 class="step-title">3 · ${esc(tr.drink)}</h3><div class="opt-group" role="radiogroup" aria-label="${esc(tr.drink)}">${beb}</div>
+      <div class="actions" style="position:sticky;bottom:0;background:var(--cream);padding-block:10px">
+        <button type="button" class="btn-primary" data-menu-add ${ready ? '' : 'disabled style="opacity:.5"'}>${esc(ready ? tr.addMenu + ' · ' + fmt(MENU_PRICE) : tr.chooseAll)}</button>
+      </div></div>`, scroll);
+}
+function openSheetKeep(inner, scroll) {
+  const sh = document.getElementById('sheet');
+  if (sh.hidden) { openSheet(inner); return; }
+  sh.innerHTML = `<div class="grab" aria-hidden="true"></div><button type="button" class="close" data-close aria-label="${esc(t().close)}">×</button>${inner}`;
+  sh.scrollTop = scroll || 0;
+}
+
+/* ---------- cart sheet ---------- */
+let clearArmed = false;
+function cartLines(lg) {
+  return Object.entries(cart).map(([k, q]) => {
+    const li = lineInfo(k);
+    if (li.isMenu) {
+      const s = byId[li.s];
+      return { key: k, q, price: li.price, name: T[lg].setTitle,
+        sub: `${nameOf(li.p, lg)} · ${nameOf(li.s, lg)}${s && s.menuUnits ? ` (${s.menuUnits} ${T[lg].unit})` : ''} · ${nameOf(li.b, lg)}` };
+    }
+    const it = byId[k];
+    return { key: k, q, price: it.price, name: nameOf(k, lg), sub: it.unit ? `${fmt(it.price, lg)} ${T[lg].perUnit}` : '' };
+  });
+}
+function openCart() {
+  sheetMode = { type: 'cart' }; clearArmed = false;
+  drawCart(true);
+}
+function drawCart(fresh) {
+  const tr = t(), lines = cartLines(lang);
+  const body = lines.length ? lines.map(l => `<div class="line">
+        <div class="nm"><b>${esc(l.name)}</b>${l.sub ? `<span>${esc(l.sub)}</span>` : ''}</div>
+        <span class="stepper"><button type="button" data-cdec="${esc(l.key)}" aria-label="−">−</button><b>${l.q}</b><button type="button" data-cinc="${esc(l.key)}" aria-label="+">+</button></span>
+        <span class="lp">${fmt(l.price * l.q)}</span></div>`).join('')
+    : `<p class="empty">${esc(tr.empty)}</p>`;
+  const inner = `<div class="inner" style="padding-top:22px">
+      <h2>${esc(tr.yourOrder)}</h2>
+      <div>${body}</div>
+      ${lines.length ? `<div class="total-row"><span>${esc(tr.total)}</span><span class="v">${fmt(cartTotal())}</span></div>
+      <div class="field"><label class="label" for="mesaInput">${esc(tr.table)}</label>
+        <input id="mesaInput" inputmode="numeric" maxlength="4" placeholder="${esc(tr.tablePh)}" value="${esc(mesa)}"></div>
+      <div class="field"><label class="label" for="noteInput">${esc(tr.note)}</label>
+        <textarea id="noteInput" maxlength="240" placeholder="${esc(tr.notePh)}">${esc(note)}</textarea></div>
+      <button type="button" class="btn-primary" data-waiter style="min-height:56px;font-size:17px">${esc(tr.showWaiter)}</button>
+      <p class="hint">${esc(tr.hint)}</p>
+      <button type="button" class="btn-ghost" data-clear>${esc(clearArmed ? tr.clearConfirm : tr.clear)}</button>` : ''}
+    </div>`;
+  if (fresh) openSheet(inner); else openSheetKeep(inner, document.getElementById('sheet').scrollTop);
+}
+
+/* ---------- waiter view (always Spanish) ---------- */
+function openWaiter() {
+  const w = document.getElementById('waiter'), lines = cartLines('es');
+  const now = new Date();
+  const time = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+  w.innerHTML = `<div class="w-in">
+      <div class="w-head"><div><div class="w-meta">PEDIDO · ${esc(time)}</div><div class="w-mesa">${mesa ? 'MESA ' + esc(mesa) : 'MESA —'}</div></div><div class="w-brand">Samarkand</div></div>
+      <div>${lines.map(l => `<div class="w-line"><span class="w-q">${l.q}×</span><span class="w-n">${esc(l.name)}${l.sub ? `<small>${esc(l.sub)}</small>` : ''}</span><span class="w-p">${fmt(l.price * l.q, 'es')}</span></div>`).join('')}</div>
+      <div class="w-total"><span>TOTAL</span><span>${fmt(cartTotal(), 'es')}</span></div>
+      ${note ? `<div class="w-note"><strong>Comentario del cliente:</strong><br>${esc(note)}</div>` : ''}
+      <div class="w-meta">Idioma del cliente: ${esc(L().name)}</div>
+      <button type="button" class="btn-ghost" data-wclose style="margin-top:8px">← ${esc(t().back)}</button>
+    </div>`;
+  w.hidden = false; w.scrollTop = 0;
+  w.querySelector('[data-wclose]').focus({ preventScroll: true });
+}
+
+/* ---------- scroll spy for chips ---------- */
+function spy() {
+  const chips = [...document.querySelectorAll('[data-chip]')];
+  const secs = chips.map(c => document.getElementById('sec-' + c.dataset.chip));
+  let cur = 0;
+  const y = window.scrollY + 150;
+  secs.forEach((s, i) => { if (s && s.offsetTop <= y) cur = i; });
+  chips.forEach((c, i) => c.classList.toggle('active', i === cur));
+  const act = chips[cur];
+  if (act && spy._last !== cur) {
+    spy._last = cur;
+    const nav = document.getElementById('chips');
+    nav.scrollTo({ left: act.offsetLeft - 16, behavior: 'smooth' });
+  }
+}
+let spyTick = false;
+window.addEventListener('scroll', () => { if (!spyTick) { spyTick = true; requestAnimationFrame(() => { spy(); spyTick = false; }); } }, { passive: true });
+
+/* ============================================================
+   EVENTS
+   ============================================================ */
+document.addEventListener('click', e => {
+  const el = e.target.closest('button, [data-open], a.chip');
+  if (!el) return;
+  const ds = el.dataset;
+
+  if (ds.lang) { lang = ds.lang; store.set('lang', lang); const y = scrollY; render(); scrollTo(0, y);
+    if (sheetMode) { const m = sheetMode; if (m.type === 'item') openItem(m.id); else if (m.type === 'menu') { sheetMode = m; drawBuilder(); } else if (m.type === 'cart') drawCart(false); }
+    return; }
+  if (el.classList.contains('chip')) { e.preventDefault(); const s = document.getElementById(el.getAttribute('href').slice(1)); s && s.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); return; }
+  if (ds.add) { e.stopPropagation(); addItem(ds.add, 1); if (cart[ds.add] === 1) toast(t().added); return; }
+  if (ds.dec) { e.stopPropagation(); addItem(ds.dec, -1); return; }
+  if (ds.close !== undefined) { closeSheet(); return; }
+  if (el.id === 'buildMenu') { openBuilder(); return; }
+  if (el.id === 'openCart') { openCart(); return; }
+
+  if (ds.sq) {
+    sheetMode.qty = Math.max(1, Math.min(30, sheetMode.qty + Number(ds.sq)));
+    document.getElementById('sq').textContent = sheetMode.qty;
+    document.getElementById('sqp').textContent = fmt(byId[sheetMode.id].price * sheetMode.qty);
+    return;
+  }
+  if (ds.sheetAdd !== undefined) {
+    cart[sheetMode.id] = sheetMode.qty; save(); refreshQty(); closeSheet(); toast(t().added); return;
+  }
+  if (ds.sheetRemove !== undefined) { delete cart[sheetMode.id]; save(); refreshQty(); closeSheet(); return; }
+
+  if (ds.pick) { sheetMode[ds.pick] = ds.val; drawBuilder(); return; }
+  if (ds.menuAdd !== undefined) {
+    const m = sheetMode; if (!(m.p && m.s && m.b)) return;
+    addItem(`menu|${m.p}|${m.s}|${m.b}`, 1); closeSheet(); toast(t().added); return;
+  }
+
+  if (ds.cinc) { addItem(ds.cinc, 1); drawCart(false); return; }
+  if (ds.cdec) { addItem(ds.cdec, -1); drawCart(false); return; }
+  if (ds.clear !== undefined) {
+    if (!clearArmed) { clearArmed = true; drawCart(false); setTimeout(() => { if (clearArmed && sheetMode && sheetMode.type === 'cart') { clearArmed = false; drawCart(false); } }, 3500); return; }
+    cart = {}; save(); refreshQty(); closeSheet(); return;
+  }
+  if (ds.waiter !== undefined) { openWaiter(); return; }
+  if (ds.wclose !== undefined) { document.getElementById('waiter').hidden = true; return; }
+
+  if (ds.open) { openItem(ds.open); return; }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const w = document.getElementById('waiter');
+    if (!w.hidden) { w.hidden = true; return; }
+    if (!document.getElementById('sheet').hidden) closeSheet();
+  }
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('article[data-open]')) { e.preventDefault(); openItem(e.target.dataset.open); }
+});
+document.getElementById('backdrop').addEventListener('click', closeSheet);
+document.addEventListener('input', e => {
+  if (e.target.id === 'mesaInput') { mesa = e.target.value.replace(/[^\dA-Za-z]/g, '').slice(0, 4); store.set('mesa', mesa); }
+  if (e.target.id === 'noteInput') { note = e.target.value; store.set('note', note); }
+});
+
+// drop unknown keys (e.g. after a menu change) so totals never break
+for (const k of Object.keys(cart)) {
+  if (k.startsWith('menu|')) { const [, p, s, b] = k.split('|'); if (!(byId[p] && byId[s] && byId[b])) delete cart[k]; }
+  else if (!byId[k]) delete cart[k];
+}
+render();
+</script>
+
+</body>
+</html>
